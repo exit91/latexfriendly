@@ -1,0 +1,125 @@
+\startenvironment article
+
+% Specification %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% This environment defines following equivalents to LaTeX
+% commands:
+% 
+% \title, \author, \date, \and, \maketitle
+%
+% In order to setup page encoding, fonts et al. you should
+% refer to the Context documentation. Examples:
+% 
+% \usepackage[utf8]{inputenc} becomes \enableregime[utf8]
+% \usepackage[german]{babel} becomes \mainlanguage[de]
+% Paper size: \setuppapersize[A4][A4]
+%
+% Some warnings:
+% * The package does not have a good algorithm to lay out
+%   the list of authors.
+% ! Spacings etc. are not perfect and may be changed every
+%   now and then to fit LaTeX more!
+% * The BibTeX module expects bibliographies to be in the file
+%   bibliography.bib. You can override these settings.
+%
+% Idiomatic Context:
+% * This environment is by no means complete. Even if in doubt
+%   you should do it the Context way. Compatibility to LaTeX
+%   is not the main goal here but to emulate the simplicity
+%   of LaTeX to create papers etc is indeed.
+% * indenting the first line of a paragraph is done explicitly
+%   via \indent
+% * quoting is done via \startquote and \stopquote or
+%   \startquotation and \stopquotation. Keyfeature: You get the
+%   language specific quotation signs for free.
+
+
+% Special Options %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\define[1]\bb{{\blackboard #1}}
+\define\wo{\backslash}
+\setupcolors[state=start]
+
+% Fonts %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetypescript [modern] [ec]
+\switchtotypeface [modern] [12pt]
+
+
+% Page Layout %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setuppapersize[A4][A4]
+\setuplayout[top=33mm, bottom=66mm, leftmargin=34mm, rightmargin=34mm,
+width=middle]
+\setuppagenumbering[location=bottom]
+
+
+% Maths %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\define\[{\startformula}
+\define\]{\stopformula}
+
+
+  % Theorems %%%
+
+\define[2]\newtheorem
+  {\defineenumeration[#1][text=#2,location=left,letter=it]}
+
+\newtheorem{lemma}{Lemma}
+
+
+% BibTeX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usemodule[bib]
+\setupbibtex[database=bibliography]
+\setuppublications[refcommand=short,alternative=apa-de,numbering=short,autohang=yes]
+\setuppublicationlist[author=\normalauthor,editor=\normalauthor,surnameset={~},firstnameset={~}]
+
+
+
+
+% Title Page %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setvariables[Article]
+  [ Title= {}
+  , Author= {}
+  , Date= \currentdate
+  ]
+
+\define\today\currentdate
+\define[1]\title{\setvariables[Article][Title={#1}]}
+\define[1]\author{\setvariables[Article][Author={#1}]}
+\define[1]\date{\setvariables[Article][Date={#1}]}
+
+\define\and{ \hskip10mm }
+
+% for first page cover without page numbering
+\definemakeup[TitlePage][]
+\define\makecover
+{
+  \startTitlePagemakeup
+  \vfill
+  \maketitle
+  \vfill \vfill
+  \vfill \vfill
+  \stopTitlePagemakeup
+}
+
+
+\define\maketitle
+{
+  $~$ \vskip5mm
+\midaligned
+  {\tfc \getvariable{Article}{Title}}
+  \vskip7mm
+\midaligned
+  \framed[width=15cm,frame=off,align=middle]
+    {\setupinterlinespace[big] \tfa \getvariable{Article}{Author}}
+  \vskip5mm
+\midaligned
+  {\tfa \getvariable{Article}{Date}}
+  \crlf\crlf
+}
+
+
+\stopenvironment
